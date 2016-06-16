@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 
 
@@ -17,19 +18,33 @@ class NewVisitorTest(unittest.TestCase):
 
         # 他發現首頁標題與標頭顯示待辦事項
         self.assertIn('To-Do', self.browser.title)
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do', header_text)
 
 
         # 他馬上受邀輸入一個待辦事項
-
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(
+            inputbox.get_attribute('placeholder'),
+            'Enter a to-do item'
+        )
         # 他在文字方塊輸入"購買孔雀羽毛"
         # 他的興趣是綁蒼蠅魚餌
+        inputbox.send_keys('Buy peacock feathers')
 
         # 當他按下Enter時, 網頁會耕興,現在網頁列出
         # "1. 購買孔雀羽毛" 一個待辦事項清單項目
+        inputbox.send_keys(Keys.ENTER)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_element_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == '1: Buy peacock feathers' for row in rows)
+        )
 
         # 此時仍然有一個文字方塊讓他可以加入一個項目
         # 她輸入"使用孔雀羽毛來製作一隻蒼蠅" (EDITH非常有條理)
-
+        self.fail('Finish the test!')
         # 網頁再次更新 現在他的清單上有這兩個項目
 
         # Edith 不知道網站能否記得他的清單
