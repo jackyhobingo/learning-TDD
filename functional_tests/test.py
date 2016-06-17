@@ -1,11 +1,10 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-import unittest
 
-
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome()
@@ -23,6 +22,7 @@ class NewVisitorTest(unittest.TestCase):
         # Edith heard a new cool todo app.
         # She went to look its home page.
         self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # 他發現首頁標題與標頭顯示待辦事項
         self.assertIn('To-Do', self.browser.title)
@@ -68,6 +68,3 @@ class NewVisitorTest(unittest.TestCase):
         # 他前往那個URL 他的待辦清單仍然在那裡
 
         # 他很滿意的上床睡覺
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
