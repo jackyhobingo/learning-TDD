@@ -1,13 +1,20 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
 import unittest
 
 
 class NewVisitorTest(unittest.TestCase):
 
     def setUp(self):
-        self.browser = webdriver.Firefox()
-
+        # firefox_capabilities = DesiredCapabilities.FIREFOX
+        # firefox_capabilities['marionette'] = True
+        # firefox_capabilities["binary"] = "/Applications/FirefoxNightly.app/Contents/MacOS/firefox-bin"
+        # driver = webdriver.Firefox(capabilities=firefox_capabilities)
+        # self.browser = webdriver.Firefox(capabilities=firefox_capabilities)
+        self.browser = webdriver.Chrome()
+        self.browser.implicitly_wait(3)
     def tearDown(self):
         self.browser.quit()
 
@@ -37,9 +44,9 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
 
         table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_element_by_tag_name('tr')
+        rows = table.find_elements_by_tag_name('tr')
         self.assertTrue(
-            any(row.text == '1: Buy peacock feathers' for row in rows)
+            any(row.text == '1: Buy peacock feathers' for row in rows), "New to-do item did not appear in table"
         )
 
         # 此時仍然有一個文字方塊讓他可以加入一個項目
