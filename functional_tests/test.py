@@ -1,3 +1,5 @@
+# Functional test
+
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -63,7 +65,7 @@ class NewVisitorTest(LiveServerTestCase):
         # 我們使用一個新的瀏覽器工作階段來確保
         ## Edith 的任何資訊都不會被cookies 等機制送出
         self.browser.quit()
-        self.browser.webdriver.Firefox()
+        self.browser = webdriver.Chrome()
 
         # Francis 造訪首頁 沒有任何Edith清單的跡象
         self.browser.get(self.live_server_url)
