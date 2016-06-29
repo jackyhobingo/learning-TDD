@@ -1,12 +1,12 @@
 # Functional test
 
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome()
@@ -60,6 +60,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
+
         # 在新的使用者Francis 來到網站
 
         # 我們使用一個新的瀏覽器工作階段來確保
@@ -101,7 +102,7 @@ class NewVisitorTest(LiveServerTestCase):
         # Edith 前往首頁
         self.browser.get(self.live_server_url)
         self.browser.set_window_size(1024, 768)
-
+        
         # 他發現輸入方塊已被妥善地置中
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
