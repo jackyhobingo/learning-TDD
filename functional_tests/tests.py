@@ -40,7 +40,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # Edith heard a new cool todo app.
         # She went to look its home page.
         self.browser.get(self.server_url)
-        self.browser.get(self.live_server_url)
+        # self.browser.get(self.live_server_url)
 
         # 他發現首頁標題與標頭顯示待辦事項
         self.assertIn('To-Do', self.browser.title)
