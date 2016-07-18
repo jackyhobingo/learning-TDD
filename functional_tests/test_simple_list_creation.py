@@ -17,7 +17,7 @@ class NewVisitorTest(FunctionalTest):
 
 
         # 他馬上受邀輸入一個待辦事項
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Enter a to-do item'
@@ -36,7 +36,7 @@ class NewVisitorTest(FunctionalTest):
 
         # 此時仍然有一個文字方塊讓他可以加入一個項目
         # 她輸入"使用孔雀羽毛來製作一隻蒼蠅" (EDITH非常有條理)
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Use peacock feathers to make a fly')
         inputbox.send_keys(Keys.ENTER)
 
@@ -60,7 +60,7 @@ class NewVisitorTest(FunctionalTest):
 
         # Francis 輸入一個新的項目 做出一個新的清單
         # 他比Edith 無趣...
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
 
