@@ -10,7 +10,7 @@ class LoginTest(FunctionalTest):
         # Edith 前往很棒的超級清單網站
         # 並且在第一次來到時, 發現了一個"Sign in" 連結
         self.browser.get(self.server_url)
-        self.browser.find_element_by_id('login').click()
+        self.browser.find_element_by_id('id_login').click()
 
         # 一個Persona 登入方塊出現了
         self.switch_to_new_window('Mozilla Persona')
@@ -26,7 +26,7 @@ class LoginTest(FunctionalTest):
         self.switch_to_new_window('To-Do')
 
         # 他可以看到她登入了
-        self.wait_for_element_with_id('logout')
+        self.wait_for_element_with_id('id_logout')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertIn('edith@mockmyid.com', navbar.text)
 
@@ -42,6 +42,6 @@ class LoginTest(FunctionalTest):
         self.fail('could not find window')
 
     def wait_for_element_with_id(self, element_id):
-        WebDriverWait(self.browser, timeout=100).until(
+        WebDriverWait(self.browser, timeout=30).until(
             lambda b: b.find_element_by_id(element_id)
         )
