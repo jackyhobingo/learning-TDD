@@ -4,7 +4,21 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from .base import FunctionalTest
 
+TEST_EMAIL = 'edith@mockmyid.com'
+
 class LoginTest(FunctionalTest):
+    
+
+    def switch_to_new_window(self, text_in_title):
+        retries = 60
+        while retries > 0:
+            for handle in self.browser.window_handles:
+                self.browser.switch_to_window(handle)
+                if text_in_title in self.browser.title:
+                    return
+            retries -= 1
+            time.sleep(0.5)
+        self.fail('could not find window')
 
     def test_login_with_persona(self):
         # Edith 前往很棒的超級清單網站
@@ -19,29 +33,26 @@ class LoginTest(FunctionalTest):
         ## 使用 mockmyid.com 來測試 email
         self.browser.find_element_by_id(
             'authentication_email'
-        ).send_keys('edith@mockmyid.com')
+        ).send_keys(TEST_EMAIL)
         self.browser.find_element_by_tag_name('button').click()
 
         # Persona 視窗關閉
         self.switch_to_new_window('To-Do')
 
         # 他可以看到她登入了
-        self.wait_for_element_with_id('id_logout')
-        navbar = self.browser.find_element_by_css_selector('.navbar')
-        self.assertIn('edith@mockmyid.com', navbar.text)
+        self.wait_to_be_logged_in(email=TEST_EMAIL)
 
-    def switch_to_new_window(self, text_in_title):
-        retries = 60
-        while retries > 0:
-            for handle in self.browser.window_handles:
-                self.browser.switch_to_window(handle)
-                if text_in_title in self.browser.title:
-                    return
-            retries -= 1
-            time.sleep(0.5)
-        self.fail('could not find window')
+        # 重新整理網頁時，他看到他是真正的工作階段登入，
+        # 而非只是一次性的登入網頁
+        self.browser.refresh()
+        self.wait_to_be_logged_in(email=TEST_EMAIL)
 
-    def wait_for_element_with_id(self, element_id):
-        WebDriverWait(self.browser, timeout=30).until(
-            lambda b: b.find_element_by_id(element_id)
-        )
+        # 他被這個新功能嚇到，反射性地按下 "logout"
+        self.browser.find_element_by_id('id_logout').click()
+        self.wait_to_be_logged_out(email=TEST_EMAIL)
+
+        # 'logged out' 狀態在重新整理後也會保持
+        self.browser.refresh()
+        self.wait_to_be_logged_out(email=TEST_EMAIL)
+
+
